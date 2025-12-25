@@ -6,14 +6,30 @@ This repo includes a test Azure ML pipeline that mounts an existing data asset, 
 - Azure CLI logged in: `az login`
 - Azure ML CLI extension: `az extension add -n ml -y`
 - Python deps: `pip install -r requirements.txt`
-- Access to subscription `3c903801-0878-49d9-9d2c-3ed7f0e0ad1c`, resource group `RG_JIT02`, workspace `cpu-project`.
+- Set your workspace context via environment variables (example):
+	- PowerShell:
+		```powershell
+		$env:SUBSCRIPTION_ID="<your-subscription-id>"
+		$env:RESOURCE_GROUP="<your-resource-group>"
+		$env:WORKSPACE="<your-workspace-name>"
+		$env:DATA_ASSET="new_cpu_data"
+		$env:DATA_VERSION="1"
+		```
+	- Bash:
+		```bash
+		export SUBSCRIPTION_ID="<your-subscription-id>"
+		export RESOURCE_GROUP="<your-resource-group>"
+		export WORKSPACE="<your-workspace-name>"
+		export DATA_ASSET="new_cpu_data"
+		export DATA_VERSION="1"
+		```
 
 ## Data asset
 - The pipeline reads Azure ML data asset `new_cpu_data` version `1` via the pipeline input in [test_pipeline_job.yaml](test_pipeline_job.yaml).
 
 ## Quick run (CLI)
 ```powershell
-az ml job create --file test_pipeline_job.yaml -w cpu-project -g RG_JIT02
+az ml job create --file test_pipeline_job.yaml -w $env:WORKSPACE -g $env:RESOURCE_GROUP
 ```
 
 ## Quick run (Python SDK)
@@ -24,9 +40,9 @@ from azure.ai.ml import MLClient, load_job
 credential = DefaultAzureCredential()
 ml_client = MLClient(
 	credential=credential,
-	subscription_id="3c903801-0878-49d9-9d2c-3ed7f0e0ad1c",
-	resource_group_name="RG_JIT02",
-	workspace_name="cpu-project",
+	subscription_id=os.environ["SUBSCRIPTION_ID"],
+	resource_group_name=os.environ["RESOURCE_GROUP"],
+	workspace_name=os.environ["WORKSPACE"],
 )
 
 pipeline = load_job("test_pipeline_job.yaml")
@@ -40,10 +56,15 @@ from azure.ai.ml import MLClient
 from azure.identity import DefaultAzureCredential
 
 credential = DefaultAzureCredential()
-ml_client = MLClient(credential, "3c903801-0878-49d9-9d2c-3ed7f0e0ad1c", "RG_JIT02", "cpu-project")
-ws = ml_client.workspaces.get("cpu-project")
+ml_client = MLClient(
+	credential=credential,
+	subscription_id=os.environ["SUBSCRIPTION_ID"],
+	resource_group_name=os.environ["RESOURCE_GROUP"],
+	workspace_name=os.environ["WORKSPACE"],
+)
+ws = ml_client.workspaces.get(os.environ["WORKSPACE"])
 print(ws.location, ":", ws.resource_group)
-raw_data = ml_client.data.get(name="new_cpu_data", version="1")
+raw_data = ml_client.data.get(name=os.environ.get("DATA_ASSET", "new_cpu_data"), version=os.environ.get("DATA_VERSION", "1"))
 print(f"Data asset URI: {raw_data.path}")
 ```
 
