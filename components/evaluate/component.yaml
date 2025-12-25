@@ -1,0 +1,15 @@
+name: evaluate
+display_name: Evaluate
+version: 1
+type: command
+inputs:
+  model:
+    type: uri_folder
+  test_data:
+    type: uri_folder
+outputs:
+  eval_report:
+    type: uri_file
+command: >-
+  python src/evaluate.py --model ${{inputs.model}} --test ${{inputs.test_data}} --report ${{outputs.eval_report}}
+environment: pipeline-env:1

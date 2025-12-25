@@ -1,0 +1,10 @@
+name: deploy
+display_name: Deploy Model
+version: 1
+type: command
+inputs:
+  model:
+    type: uri_folder
+command: >-
+  python src/deploy.py --model ${{inputs.model}}
+environment: pipeline-env:1

@@ -1,0 +1,35 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+name: sample-pipeline
+display_name: sample-pipeline
+experiment_name: pipeline-experiment
+
+# Define the pipeline compute in one place (YAML anchor). Change the value below to update all jobs.
+compute: &pipeline_compute dev-ci
+
+jobs:
+  ingest:
+    type: command
+    component: ./components/data_ingest/component.yaml
+    compute: *pipeline_compute
+
+  preprocess:
+    type: command
+    component: ./components/preprocess/component.yaml
+    inputs:
+      raw_data: ${jobs.ingest.outputs.raw_data}
+    compute: *pipeline_compute
+
+  train:
+    type: command
+    component: ./components/train/component.yaml
+    inputs:
+      train_data: ${jobs.preprocess.outputs.processed_data}
+    compute: *pipeline_compute
+
+  evaluate:
+    type: command
+    component: ./components/evaluate/component.yaml
+    inputs:
+      model: ${jobs.train.outputs.model}
+      test_data: ${jobs.preprocess.outputs.test_data}
+    compute: *pipeline_compute

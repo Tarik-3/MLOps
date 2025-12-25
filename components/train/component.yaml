@@ -1,0 +1,15 @@
+name: train
+display_name: Train Model
+version: 1
+type: command
+inputs:
+  train_data:
+    type: uri_folder
+outputs:
+  model:
+    type: uri_folder
+  metrics:
+    type: uri_file
+command: >-
+  python src/train.py --train ${{inputs.train_data}} --model_output ${{outputs.model}} --metrics ${{outputs.metrics}}
+environment: pipeline-env:1

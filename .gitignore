@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Environments
+.venv/
+venv/
+env/
+.Python
+
+# VS Code and tooling
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test/Cache
+.pytest_cache/
+*.log
+
+# Azure ML / MLflow (local artifacts)
+azureml/
+mlruns/
+
+# OS
+.DS_Store
+Thumbs.db

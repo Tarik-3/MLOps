@@ -1,0 +1,10 @@
+name: data_ingest
+display_name: Data Ingest
+version: 1
+type: command
+outputs:
+  raw_data:
+    type: uri_folder
+command: >-
+  python src/data_ingest.py --output ${{outputs.raw_data}}
+environment: pipeline-env:1

@@ -1,0 +1,15 @@
+name: preprocess
+display_name: Preprocess
+version: 1
+type: command
+inputs:
+  raw_data:
+    type: uri_folder
+outputs:
+  processed_data:
+    type: uri_folder
+  test_data:
+    type: uri_folder
+command: >-
+  python src/preprocess.py --input ${{inputs.raw_data}} --processed_output ${{outputs.processed_data}} --test_output ${{outputs.test_data}}
+environment: pipeline-env:1
