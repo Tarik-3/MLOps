@@ -9,3 +9,4 @@ dependencies:
     - scikit-learn
     - joblib
     - azure-ai-ml>=1.2.0
+    - azure-identity>=1.17.0

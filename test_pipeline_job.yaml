@@ -9,7 +9,7 @@ compute: &pipeline_compute dev-ci
 # Pipeline-level inputs
 inputs:
   data_repo:
-    data: azureml:raw_data@latest
+    data: azureml:new_cpu_data:1
     mode: ro_mount
 
 jobs:
