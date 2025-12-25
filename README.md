@@ -50,6 +50,31 @@ job = ml_client.jobs.create_or_update(pipeline)
 print(job.name)
 ```
 
+## Run via DSL (Python-only, no CLI)
+Use environment variables for your workspace and data asset, then run the DSL script:
+
+PowerShell example:
+```powershell
+$env:SUBSCRIPTION_ID="<your-subscription-id>"
+$env:RESOURCE_GROUP="<your-resource-group>"
+$env:WORKSPACE="<your-workspace-name>"
+$env:DATA_ASSET="new_cpu_data"
+$env:DATA_VERSION="1"
+python .\src\pipeline_dsl.py
+```
+
+Bash example:
+```bash
+export SUBSCRIPTION_ID="<your-subscription-id>"
+export RESOURCE_GROUP="<your-resource-group>"
+export WORKSPACE="<your-workspace-name>"
+export DATA_ASSET="new_cpu_data"
+export DATA_VERSION="1"
+python ./src/pipeline_dsl.py
+```
+
+The DSL pipeline uses `serverless` compute and stitches the existing YAML command components: preprocess → train → evaluate → deploy.
+
 ## Verify workspace and data access
 ```python
 from azure.ai.ml import MLClient
